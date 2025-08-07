@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { X, Plus, Check, ChevronsUpDown } from "lucide-react";
+import { X, Plus, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import backend from "~backend/client";
@@ -22,7 +22,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: searchResults } = useQuery({
+  const { data: searchResults, isLoading: isSearching } = useQuery({
     queryKey: ["technologies", "search", searchQuery],
     queryFn: () => backend.submissions.searchTechnologies({ q: searchQuery, limit: 20 }),
     enabled: searchQuery.length > 0,
@@ -92,7 +92,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
     tech => tech.name.toLowerCase() === searchQuery.toLowerCase()
   );
 
-  const showCreateOption = searchQuery.trim() && !exactMatch;
+  const showCreateOption = searchQuery.trim() && !exactMatch && !isSearching;
 
   return (
     <div className="space-y-3">
@@ -131,7 +131,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0" align="start">
+        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
           <Command>
             <CommandInput
               placeholder="Digite uma tecnologia (ex: React, Node.js, Python)"
@@ -139,11 +139,20 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
               onValueChange={setSearchQuery}
             />
             <CommandList>
-              <CommandEmpty>
-                {searchQuery ? "Nenhuma tecnologia encontrada" : "Digite para buscar tecnologias"}
-              </CommandEmpty>
+              {isSearching && searchQuery && (
+                <div className="flex items-center justify-center py-6">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="ml-2 text-sm text-gray-500">Buscando...</span>
+                </div>
+              )}
               
-              {filteredSuggestions.length > 0 && (
+              {!isSearching && (
+                <CommandEmpty>
+                  {searchQuery ? "Nenhuma tecnologia encontrada" : "Digite para buscar tecnologias"}
+                </CommandEmpty>
+              )}
+              
+              {!isSearching && filteredSuggestions.length > 0 && (
                 <CommandGroup heading="Tecnologias disponíveis">
                   {filteredSuggestions.map((tech) => (
                     <CommandItem
