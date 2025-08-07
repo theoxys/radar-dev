@@ -82,7 +82,7 @@ export function SubmissionsList() {
 			<div className="flex flex-col md:flex-row gap-2 items-start">
 
       {/* Filters */}
-      <Card className="max-w-[350px] fixed">
+      <Card className="md:max-w-[350px]">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <Filter className="h-5 w-5" />
@@ -125,14 +125,7 @@ export function SubmissionsList() {
 
           {/* Action Buttons */}
           <div className="flex gap-3 justify-between">
-            {/* Results Count */}
-            {data && (
-              <div className="text-center">
-                <Badge variant="secondary">
-                  {data.total} submissões encontradas
-                </Badge>
-              </div>
-            )}
+
             <div className="flex items-center gap-3">
               <Button onClick={clearFilters} variant="outline" className="flex w-fit max-w-100">
                 Limpar Filtros
@@ -143,6 +136,14 @@ export function SubmissionsList() {
               </Button>
             </div>
           </div>
+					            {/* Results Count */}
+            {data && (
+              <div className="text-center">
+                <Badge variant="secondary">
+                  {data.total} submissões encontradas
+                </Badge>
+              </div>
+            )}
         </CardContent>
       </Card>
 
