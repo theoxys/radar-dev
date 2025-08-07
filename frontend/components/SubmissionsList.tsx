@@ -79,6 +79,8 @@ export function SubmissionsList() {
         </p>
       </div>
 
+			<div className="flex flex-col md:flex-row gap-2 items-start">
+
       {/* Filters */}
       <Card>
         <CardHeader>
@@ -191,6 +193,9 @@ export function SubmissionsList() {
           )}
         </>
       )}
+
+							</div>
+
     </div>
   );
 }
