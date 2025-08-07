@@ -40,7 +40,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
       
       toast({
         title: "Tecnologia criada!",
-        description: `"${newTechnology.name}" foi adicionada com sucesso.`,
+        description: `"${newTechnology.name}" foi adicionada com sucesso!`,
       });
     },
     onError: (error: any) => {
