@@ -14,19 +14,8 @@ export function Header() {
           </Link>
           
           <nav className="flex items-center gap-4">
-            <Link to="/">
-              <Button 
-                variant={location.pathname === "/" ? "default" : "ghost"}
-                className="flex items-center gap-2"
-              >
-                <List className="h-4 w-4" />
-                Ver Submissões
-              </Button>
-            </Link>
-            
             <Link to="/submit">
               <Button 
-                variant={location.pathname === "/submit" ? "default" : "ghost"}
                 className="flex items-center gap-2"
               >
                 <PlusCircle className="h-4 w-4" />
