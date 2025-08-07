@@ -8,13 +8,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
-import { useAuth } from "./AuthProvider";
+import backend from "~backend/client";
 import type { CreateSubmissionRequest, Technology } from "~backend/submissions/types";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { getAuthenticatedBackend } = useAuth();
   
   const [formData, setFormData] = useState({
     companyName: "",
@@ -29,7 +28,6 @@ export function SubmissionForm() {
 
   const createSubmission = useMutation({
     mutationFn: (data: CreateSubmissionRequest) => {
-      const backend = getAuthenticatedBackend();
       return backend.submissions.create(data);
     },
     onSuccess: () => {

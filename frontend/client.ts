@@ -33,7 +33,6 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
  * Client is an API client for the  Encore application.
  */
 export class Client {
-    public readonly auth: auth.ServiceClient
     public readonly submissions: submissions.ServiceClient
     private readonly options: ClientOptions
     private readonly target: string
@@ -49,7 +48,6 @@ export class Client {
         this.target = target
         this.options = options ?? {}
         const base = new BaseClient(this.target, this.options)
-        this.auth = new auth.ServiceClient(base)
         this.submissions = new submissions.ServiceClient(base)
     }
 
@@ -79,32 +77,6 @@ export interface ClientOptions {
 
     /** Default RequestInit to be used for the client */
     requestInit?: Omit<RequestInit, "headers"> & { headers?: Record<string, string> }
-}
-
-/**
- * Import the endpoint handlers to derive the types for the client.
- */
-import { getUserInfo as api_auth_user_info_getUserInfo } from "~backend/auth/user_info";
-
-export namespace auth {
-
-    export class ServiceClient {
-        private baseClient: BaseClient
-
-        constructor(baseClient: BaseClient) {
-            this.baseClient = baseClient
-            this.getUserInfo = this.getUserInfo.bind(this)
-        }
-
-        /**
-         * Returns the current user's information.
-         */
-        public async getUserInfo(): Promise<ResponseType<typeof api_auth_user_info_getUserInfo>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/auth/me`, {method: "GET", body: undefined})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_user_info_getUserInfo>
-        }
-    }
 }
 
 /**
