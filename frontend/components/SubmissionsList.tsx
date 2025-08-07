@@ -71,10 +71,10 @@ export function SubmissionsList() {
   return (
     <div className="max-w-[992px] mx-auto space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           Informações de Trabalho Compartilhadas
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Explore dados reais de salários e benefícios compartilhados anonimamente
         </p>
       </div>
@@ -123,26 +123,24 @@ export function SubmissionsList() {
 
           {/* Action Buttons */}
           <div className="flex gap-3 justify-between">
-						          {/* Results Count */}
-          {data && (
-            <div className="text-center">
-              <Badge variant="secondary">
-                {data.total} submissões encontradas
-              </Badge>
+            {/* Results Count */}
+            {data && (
+              <div className="text-center">
+                <Badge variant="secondary">
+                  {data.total} submissões encontradas
+                </Badge>
+              </div>
+            )}
+            <div className="flex items-center gap-3">
+              <Button onClick={clearFilters} variant="outline" className="flex w-fit max-w-100">
+                Limpar Filtros
+              </Button>
+              <Button onClick={handleApplyFilters} className="flex w-fit max-w-100">
+                <Search className="h-4 w-4 mr-2" />
+                Aplicar Filtros
+              </Button>
             </div>
-          )}
-						<div className="flex items-center gap-3">
-            <Button onClick={clearFilters} variant="outline" className="flex w-fit max-w-100">
-              Limpar Filtros
-            </Button>
-            <Button onClick={handleApplyFilters} className="flex w-fit max-w-100">
-              <Search className="h-4 w-4 mr-2" />
-              Aplicar Filtros
-            </Button>
-						</div>
           </div>
-
-
         </CardContent>
       </Card>
 
@@ -153,7 +151,7 @@ export function SubmissionsList() {
         </div>
       ) : data?.submissions.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-600">Nenhuma submissão encontrada com os filtros aplicados.</p>
+          <p className="text-muted-foreground">Nenhuma submissão encontrada com os filtros aplicados.</p>
         </div>
       ) : (
         <>
@@ -176,7 +174,7 @@ export function SubmissionsList() {
                 Anterior
               </Button>
               
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted-foreground">
                 Página {data.page} de {data.totalPages}
               </span>
               

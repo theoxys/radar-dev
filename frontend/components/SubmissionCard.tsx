@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Calendar, DollarSign, Code } from "lucide-react";
+import { ExternalLink, Calendar, Code } from "lucide-react";
 import type { Submission } from "~backend/submissions/types";
 
 interface SubmissionCardProps {
@@ -43,13 +43,13 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 href={submission.companyLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800"
+                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink className="h-4 w-4" />
               </a>
             </CardTitle>
-            <p className="text-gray-600">{submission.position}</p>
+            <p className="text-muted-foreground">{submission.position}</p>
           </div>
           
           <div className="text-right">
@@ -62,7 +62,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
         {/* Tech Stack */}
         {submission.technologies.length > 0 && (
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Code className="h-4 w-4" />
               <span>Stack:</span>
             </div>
@@ -79,13 +79,13 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
 
       <CardContent>
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             {formatDate(submission.createdAt)}
           </div>
 
           {hasDetails && (
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
               {showDetails ? "Clique para ocultar detalhes" : "Clique para ver detalhes"}
             </div>
           )}
@@ -107,8 +107,8 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.1 }}
                   >
-                    <h4 className="font-medium text-sm text-gray-700 mb-1">Benefícios:</h4>
-                    <p className="text-sm text-gray-600 bg-green-50 p-2 rounded">
+                    <h4 className="font-medium text-sm text-foreground mb-1">Benefícios:</h4>
+                    <p className="text-sm text-muted-foreground bg-green-50 dark:bg-green-950/20 p-2 rounded">
                       {submission.benefits}
                     </p>
                   </motion.div>
@@ -120,8 +120,8 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <h4 className="font-medium text-sm text-gray-700 mb-1">Comentários:</h4>
-                    <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded">
+                    <h4 className="font-medium text-sm text-foreground mb-1">Comentários:</h4>
+                    <p className="text-sm text-muted-foreground bg-blue-50 dark:bg-blue-950/20 p-2 rounded">
                       {submission.comments}
                     </p>
                   </motion.div>

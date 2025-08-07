@@ -30,7 +30,11 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
               Você precisa estar logado para compartilhar informações de trabalho.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Para manter a qualidade dos dados e evitar spam, é necessário fazer login com sua conta Google.
+              Seus dados pessoais não serão compartilhados publicamente.
+            </p>
             <Button onClick={signIn} className="w-full">
               Entrar com Google
             </Button>
