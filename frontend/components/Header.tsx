@@ -12,7 +12,7 @@ export function Header() {
 
   return (
     <header className="bg-background shadow-sm border-b">
-      <div className="container mx-auto px-4 py-4 max-w-[1330px]">
+      <div className="container mx-auto px-4 py-4 max-w-[1364px]">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold text-foreground">
             RadarDev
