@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, ChevronLeft, ChevronRight, Filter, DollarSign, Globe, TrendingUp, Users } from "lucide-react";
 import { TechStackFilter } from "./TechStackFilter";
 import backend from "~backend/client";
@@ -70,6 +71,7 @@ export function SubmissionsList() {
 
   return (
     <div className="max-w-[1330px] mx-auto space-y-8">
+			<ScrollArea className="w-full h-full">
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-foreground">
@@ -241,6 +243,7 @@ export function SubmissionsList() {
           </>
         )}
       </div>
+				</ScrollArea>
     </div>
   );
 }
