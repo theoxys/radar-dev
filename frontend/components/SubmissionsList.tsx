@@ -71,7 +71,6 @@ export function SubmissionsList() {
 
   return (
     <div className="max-w-[1330px] mx-auto space-y-8">
-			<ScrollArea className="w-full h-screen space-y-4">
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-foreground">
@@ -243,7 +242,6 @@ export function SubmissionsList() {
           </>
         )}
       </div>
-				</ScrollArea>
     </div>
   );
 }
