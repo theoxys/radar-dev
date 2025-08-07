@@ -7,8 +7,8 @@ export function Header() {
 
   return (
     <header className="bg-white shadow-sm border-b">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between max-w-[992px]">
+      <div className="container mx-auto px-4 py-4 max-w-[992px]">
+        <div className="flex items-center justify-between ">
           <Link to="/" className="text-2xl font-bold text-gray-900">
             RadarDev
           </Link>
