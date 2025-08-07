@@ -130,7 +130,7 @@ export function SubmissionsList() {
 
       <div className="flex flex-col md:flex-row gap-4 items-start">
         {/* Filters */}
-        <Card className="md:max-w-[350px]">
+        <Card className="w-full md:max-w-[350px]">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Filter className="h-5 w-5" />
