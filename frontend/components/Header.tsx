@@ -8,9 +8,9 @@ export function Header() {
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between max-w-[992px]">
           <Link to="/" className="text-2xl font-bold text-gray-900">
-            JobShare
+            RadarDev
           </Link>
           
           <nav className="flex items-center gap-4">
