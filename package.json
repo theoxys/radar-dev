@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "packageManager": "bun",
+  "scripts": {
+    "dev:backend": "cd backend && encore run",
+    "dev:frontend": "cd frontend && npx vite dev"
+  },
   "workspaces": [
     "backend",
     "frontend"

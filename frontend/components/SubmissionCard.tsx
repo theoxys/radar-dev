@@ -30,7 +30,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
   const hasDetails = submission.comments || submission.benefits;
 
   return (
-    <Card 
+    <Card
       className="hover:shadow-md transition-shadow cursor-pointer"
       onClick={() => hasDetails && setShowDetails(!showDetails)}
     >
@@ -51,7 +51,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
             </CardTitle>
             <p className="text-muted-foreground">{submission.position}</p>
           </div>
-          
+
           <div className="text-right">
             <Badge variant="secondary" className="text-lg font-semibold">
               {formatSalary(submission.salary)}
@@ -108,12 +108,12 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     transition={{ delay: 0.1 }}
                   >
                     <h4 className="font-medium text-sm text-foreground mb-1">Benefícios:</h4>
-                    <p className="text-sm text-muted-foreground bg-green-50 dark:bg-green-950/20 p-2 rounded">
+                    <p className="text-sm text-green-900 dark:text-green-100 bg-green-200/50 dark:bg-green-500/10 p-2 rounded">
                       {submission.benefits}
                     </p>
                   </motion.div>
                 )}
-                
+
                 {submission.comments && (
                   <motion.div
                     initial={{ y: -10, opacity: 0 }}
@@ -121,7 +121,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     transition={{ delay: 0.2 }}
                   >
                     <h4 className="font-medium text-sm text-foreground mb-1">Comentários:</h4>
-                    <p className="text-sm text-muted-foreground bg-blue-50 dark:bg-blue-950/20 p-2 rounded">
+                    <p className="text-sm text-blue-900 dark:text-blue-100  bg-blue-100/50 dark:bg-blue-500/10 p-2 rounded">
                       {submission.comments}
                     </p>
                   </motion.div>

@@ -9,12 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
 import backend from "~backend/client";
-import type { CreateSubmissionRequest, Technology } from "~backend/submissions/types";
+import { supabase } from "@/lib/supabase";
+import { CreateSubmissionRequest, Technology } from "@/types/types";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [formData, setFormData] = useState({
     companyName: "",
     companyLink: "",
@@ -49,7 +50,7 @@ export function SubmissionForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.companyName || !formData.companyLink || !formData.position || !formData.salary) {
       toast({
         title: "Campos obrigatórios",
@@ -66,76 +67,82 @@ export function SubmissionForm() {
       salary: formData.salary,
       comments: formData.comments || undefined,
       benefits: formData.benefits || undefined,
-      technologyIds: selectedTechnologies.map(tech => tech.id),
+      technologyIds: selectedTechnologies.map((tech) => tech.id),
     };
 
     createSubmission.mutate(submissionData);
   };
 
   const handleInputChange = (field: keyof typeof formData, value: string | number) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
-    <div className="max-w-[992px] mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Compartilhar Informações de Trabalho</CardTitle>
+    <div className="max-w-[800px] mx-auto">
+      <Card className="p-16">
+        <CardHeader className="p-0">
+          <CardTitle className="text-2xl font-bold">Compartilhar Informações de Trabalho</CardTitle>
           <CardDescription>
-            Compartilhe anonimamente informações sobre seu emprego atual para ajudar outros profissionais.
-            Seus dados pessoais não serão armazenados.
+            Compartilhe anonimamente informações sobre seu emprego atual para ajudar outros profissionais. Seus dados
+            pessoais não serão armazenados.
           </CardDescription>
         </CardHeader>
-        
-        <CardContent>
+
+        <CardContent className="p-0">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="companyName">Nome da Empresa *</Label>
-              <Input
-                id="companyName"
-                value={formData.companyName}
-                onChange={(e) => handleInputChange("companyName", e.target.value)}
-                placeholder="Ex: Google, Microsoft, Nubank"
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="companyName">Nome da Empresa *</Label>
+                <Input
+                  id="companyName"
+                  value={formData.companyName}
+                  onChange={(e) => handleInputChange("companyName", e.target.value)}
+                  placeholder="Ex: Google, Microsoft, Nubank"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="companyLink">Link da Empresa *</Label>
+                <Input
+                  id="companyLink"
+                  type="url"
+                  value={formData.companyLink}
+                  onChange={(e) => handleInputChange("companyLink", e.target.value)}
+                  placeholder="Ex: https://www.empresa.com ou LinkedIn"
+                  required
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="companyLink">Link da Empresa *</Label>
-              <Input
-                id="companyLink"
-                type="url"
-                value={formData.companyLink}
-                onChange={(e) => handleInputChange("companyLink", e.target.value)}
-                placeholder="Ex: https://www.empresa.com ou LinkedIn"
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="position">Cargo *</Label>
+                <Input
+                  id="position"
+                  value={formData.position}
+                  onChange={(e) => handleInputChange("position", e.target.value)}
+                  placeholder="Ex: Desenvolvedor Front-end, Gerente de Produto"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="salary">Salário (USD) / Mensal *</Label>
+                <Input
+                  id="salary"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={formData.salary || ""}
+                  onChange={(e) => handleInputChange("salary", parseFloat(e.target.value) || 0)}
+                  placeholder="Ex: 8500.00"
+                  required
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="position">Cargo *</Label>
-              <Input
-                id="position"
-                value={formData.position}
-                onChange={(e) => handleInputChange("position", e.target.value)}
-                placeholder="Ex: Desenvolvedor Front-end, Gerente de Produto"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="salary">Salário (USD) *</Label>
-              <Input
-                id="salary"
-                type="number"
-                min="0"
-                step="0.01"
-                value={formData.salary || ""}
-                onChange={(e) => handleInputChange("salary", parseFloat(e.target.value) || 0)}
-                placeholder="Ex: 8500.00"
-                required
-              />
-            </div>
+            <div className="h-px bg-foreground/10 my-10"></div>
 
             <TechStackSelect
               selectedTechnologies={selectedTechnologies}
@@ -164,11 +171,7 @@ export function SubmissionForm() {
               />
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={createSubmission.isPending}
-            >
+            <Button type="submit" className="w-full" disabled={createSubmission.isPending}>
               {createSubmission.isPending ? "Enviando..." : "Compartilhar Anonimamente"}
             </Button>
           </form>

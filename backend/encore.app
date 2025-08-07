@@ -1,1 +1,1 @@
-{"id": "anonymous-job-sharing-app-syzi", "lang": "typescript"}
+{"id": "anonymous-job-sharing-app-syzi", "lang": "typescript" }

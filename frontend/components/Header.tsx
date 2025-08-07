@@ -2,18 +2,19 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import Logo from "./Logo";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="bg-background shadow-sm border-b">
+    <header className="bg-background">
       <div className="container mx-auto px-4 py-4 max-w-[1364px]">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold text-foreground">
-            RadarDev
+            <Logo height={24} />
           </Link>
-          
+
           <nav className="flex items-center gap-4">
             <Link to="/submit">
               <Button className="flex items-center gap-2">
