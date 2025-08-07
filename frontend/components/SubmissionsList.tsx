@@ -69,7 +69,7 @@ export function SubmissionsList() {
   }
 
   return (
-    <div className="max-w-[992px] mx-auto space-y-6">
+    <div className="max-w-[1330px] mx-auto space-y-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-foreground mb-2">
           Informações de Trabalho Compartilhadas
@@ -79,7 +79,7 @@ export function SubmissionsList() {
         </p>
       </div>
 
-			<div className="flex flex-col md:flex-row gap-2 items-start">
+			<div className="flex flex-col md:flex-row gap-4 items-start">
 
       {/* Filters */}
       <Card className="md:max-w-[350px]">
