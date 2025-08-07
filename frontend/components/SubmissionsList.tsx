@@ -122,17 +122,8 @@ export function SubmissionsList() {
           />
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button onClick={clearFilters} variant="outline" className="flex-1">
-              Limpar Filtros
-            </Button>
-            <Button onClick={handleApplyFilters} className="flex-1">
-              <Search className="h-4 w-4 mr-2" />
-              Aplicar Filtros
-            </Button>
-          </div>
-
-          {/* Results Count */}
+          <div className="flex gap-3 justify-end">
+						          {/* Results Count */}
           {data && (
             <div className="text-center">
               <Badge variant="secondary">
@@ -140,6 +131,16 @@ export function SubmissionsList() {
               </Badge>
             </div>
           )}
+            <Button onClick={clearFilters} variant="outline" className="flex-1 max-w-100">
+              Limpar Filtros
+            </Button>
+            <Button onClick={handleApplyFilters} className="flex-1 max-w-100">
+              <Search className="h-4 w-4 mr-2" />
+              Aplicar Filtros
+            </Button>
+          </div>
+
+
         </CardContent>
       </Card>
 
