@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, ChevronDown, ChevronUp, Calendar, DollarSign, Code } from "lucide-react";
+import { ExternalLink, Calendar, DollarSign, Code } from "lucide-react";
 import type { Submission } from "~backend/submissions/types";
 
 interface SubmissionCardProps {
@@ -13,9 +13,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
   const formatSalary = (salary: number) => {
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "BRL",
+      currency: "USD",
     }).format(salary);
   };
 
@@ -27,8 +27,13 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
     }).format(new Date(date));
   };
 
+  const hasDetails = submission.comments || submission.benefits;
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card 
+      className="hover:shadow-md transition-shadow cursor-pointer"
+      onClick={() => hasDetails && setShowDetails(!showDetails)}
+    >
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="space-y-1">
@@ -39,6 +44,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800"
+                onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink className="h-4 w-4" />
               </a>
@@ -79,44 +85,52 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
             {formatDate(submission.createdAt)}
           </div>
 
-          {(submission.comments || submission.benefits) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowDetails(!showDetails)}
-              className="flex items-center gap-1"
-            >
-              {showDetails ? "Ocultar" : "Ver"} Detalhes
-              {showDetails ? (
-                <ChevronUp className="h-4 w-4" />
-              ) : (
-                <ChevronDown className="h-4 w-4" />
-              )}
-            </Button>
+          {hasDetails && (
+            <div className="text-sm text-gray-500">
+              {showDetails ? "Clique para ocultar detalhes" : "Clique para ver detalhes"}
+            </div>
           )}
         </div>
 
-        {showDetails && (submission.comments || submission.benefits) && (
-          <div className="mt-4 pt-4 border-t space-y-3">
-            {submission.benefits && (
-              <div>
-                <h4 className="font-medium text-sm text-gray-700 mb-1">Benefícios:</h4>
-                <p className="text-sm text-gray-600 bg-green-50 p-2 rounded">
-                  {submission.benefits}
-                </p>
+        <AnimatePresence>
+          {showDetails && hasDetails && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="mt-4 pt-4 border-t space-y-3">
+                {submission.benefits && (
+                  <motion.div
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <h4 className="font-medium text-sm text-gray-700 mb-1">Benefícios:</h4>
+                    <p className="text-sm text-gray-600 bg-green-50 p-2 rounded">
+                      {submission.benefits}
+                    </p>
+                  </motion.div>
+                )}
+                
+                {submission.comments && (
+                  <motion.div
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <h4 className="font-medium text-sm text-gray-700 mb-1">Comentários:</h4>
+                    <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded">
+                      {submission.comments}
+                    </p>
+                  </motion.div>
+                )}
               </div>
-            )}
-            
-            {submission.comments && (
-              <div>
-                <h4 className="font-medium text-sm text-gray-700 mb-1">Comentários:</h4>
-                <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded">
-                  {submission.comments}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardContent>
     </Card>
   );

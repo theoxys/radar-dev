@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { Search, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { TechStackFilter } from "./TechStackFilter";
 import backend from "~backend/client";
 import type { ListSubmissionsRequest, Technology } from "~backend/submissions/types";
@@ -31,26 +31,12 @@ export function SubmissionsList() {
     queryFn: () => backend.submissions.list(filters),
   });
 
-  const handleSearch = () => {
+  const handleApplyFilters = () => {
     setFilters(prev => ({
       ...prev,
       q: searchInput,
-      page: 1,
-    }));
-  };
-
-  const handleSalaryFilter = () => {
-    setFilters(prev => ({
-      ...prev,
       salaryMin: salaryRange[0],
       salaryMax: salaryRange[1],
-      page: 1,
-    }));
-  };
-
-  const handleTechStackFilter = () => {
-    setFilters(prev => ({
-      ...prev,
       technologyIds: selectedTechnologies.map(tech => tech.id),
       page: 1,
     }));
@@ -83,7 +69,7 @@ export function SubmissionsList() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-[992px] mx-auto space-y-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Informações de Trabalho Compartilhadas
@@ -96,65 +82,64 @@ export function SubmissionsList() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Filtros</CardTitle>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Filtros
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="search">Buscar por empresa ou cargo</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="search"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Ex: Google, Desenvolvedor"
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                />
-                <Button onClick={handleSearch} size="icon">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Faixa Salarial: R$ {salaryRange[0].toLocaleString()} - R$ {salaryRange[1].toLocaleString()}</Label>
-              <div className="px-2">
-                <Slider
-                  value={salaryRange}
-                  onValueChange={setSalaryRange}
-                  max={50000}
-                  min={0}
-                  step={500}
-                  className="w-full"
-                />
-              </div>
-              <Button onClick={handleSalaryFilter} variant="outline" className="w-full">
-                Aplicar Filtro de Salário
-              </Button>
-            </div>
-          </div>
-
+        <CardContent className="space-y-6">
+          {/* Search */}
           <div className="space-y-2">
-            <TechStackFilter
-              selectedTechnologies={selectedTechnologies}
-              onTechnologiesChange={setSelectedTechnologies}
+            <Label htmlFor="search">Buscar por empresa ou cargo</Label>
+            <Input
+              id="search"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Ex: Google, Desenvolvedor"
+              onKeyPress={(e) => e.key === "Enter" && handleApplyFilters()}
             />
-            <Button onClick={handleTechStackFilter} variant="outline" className="w-full">
-              Aplicar Filtro de Tecnologias
-            </Button>
           </div>
 
-          <div className="flex justify-between items-center">
-            <Button onClick={clearFilters} variant="outline">
+          {/* Salary Range */}
+          <div className="space-y-2">
+            <Label>Faixa Salarial: ${salaryRange[0].toLocaleString()} - ${salaryRange[1].toLocaleString()}</Label>
+            <div className="px-2">
+              <Slider
+                value={salaryRange}
+                onValueChange={setSalaryRange}
+                max={50000}
+                min={0}
+                step={500}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Tech Stack Filter */}
+          <TechStackFilter
+            selectedTechnologies={selectedTechnologies}
+            onTechnologiesChange={setSelectedTechnologies}
+          />
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button onClick={handleApplyFilters} className="flex-1">
+              <Search className="h-4 w-4 mr-2" />
+              Aplicar Filtros
+            </Button>
+            <Button onClick={clearFilters} variant="outline" className="flex-1">
               Limpar Filtros
             </Button>
-            
-            {data && (
+          </div>
+
+          {/* Results Count */}
+          {data && (
+            <div className="text-center">
               <Badge variant="secondary">
                 {data.total} submissões encontradas
               </Badge>
-            )}
-          </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

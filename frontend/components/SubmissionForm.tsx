@@ -75,7 +75,7 @@ export function SubmissionForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[992px] mx-auto">
       <Card>
         <CardHeader>
           <CardTitle>Compartilhar Informações de Trabalho</CardTitle>
@@ -122,7 +122,7 @@ export function SubmissionForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="salary">Salário (R$) *</Label>
+              <Label htmlFor="salary">Salário (USD) *</Label>
               <Input
                 id="salary"
                 type="number"
