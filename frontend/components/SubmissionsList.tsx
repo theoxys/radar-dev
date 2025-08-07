@@ -158,7 +158,7 @@ export function SubmissionsList() {
         </div>
       ) : (
         <>
-          <div className="grid gap-4">
+          <div className="flex w-full gap-4">
             {data?.submissions.map((submission) => (
               <SubmissionCard key={submission.id} submission={submission} />
             ))}
