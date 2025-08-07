@@ -86,7 +86,7 @@ export function SubmissionsList() {
           Por que usar o Radar Dev?
         </h3>
         
-        <div className="hidden md:grid g:grid-cols-3 gap-4">
+        <div className="hidden md:grid md:grid-cols-3 gap-4">
           <Card className="text-center max-h-">
             <CardHeader>
               <div className="mx-auto mb-2 p-2 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
