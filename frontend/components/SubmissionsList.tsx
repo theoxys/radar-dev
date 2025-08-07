@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Filter, DollarSign, Globe, TrendingUp, Users } from "lucide-react";
 import { TechStackFilter } from "./TechStackFilter";
 import backend from "~backend/client";
 import type { ListSubmissionsRequest, Technology } from "~backend/submissions/types";
@@ -69,74 +69,138 @@ export function SubmissionsList() {
   }
 
   return (
-    <div className="max-w-[1330px] mx-auto space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Informações de Trabalho Compartilhadas
+    <div className="max-w-[1330px] mx-auto space-y-8">
+      {/* Hero Section */}
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold text-foreground">
+          Descubra o mercado global de tecnologia
         </h1>
-        <p className="text-muted-foreground">
-          Explore dados reais de salários e benefícios compartilhados anonimamente
-        </p>
+        <h2 className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Saiba quanto ganham devs brasileiros em empresas gringas e encontre as melhores oportunidades sem sair de casa.
+        </h2>
       </div>
 
-			<div className="flex flex-col md:flex-row gap-4 items-start">
+      {/* Benefits Cards */}
+      <div className="space-y-4">
+        <h3 className="text-2xl font-semibold text-center text-foreground">
+          Por que usar o Radar Dev?
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="text-center">
+            <CardHeader className="pb-3">
+              <div className="mx-auto mb-2 p-2 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
+                <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
+              </div>
+              <CardTitle className="text-lg">Transparência salarial</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Consulte salários reais informados anonimamente por profissionais como você.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-      {/* Filters */}
-      <Card className="md:max-w-[350px]">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Filtros
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Search */}
-          <div className="space-y-2">
-            <Label htmlFor="search">Buscar por empresa ou cargo</Label>
-            <Input
-              id="search"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Ex: Google, Desenvolvedor"
-              onKeyPress={(e) => e.key === "Enter" && handleApplyFilters()}
-            />
-          </div>
+          <Card className="text-center">
+            <CardHeader className="pb-3">
+              <div className="mx-auto mb-2 p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
+                <Globe className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <CardTitle className="text-lg">Oportunidades internacionais</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Filtre vagas de empresas estrangeiras que contratam 100% remoto do Brasil.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-          {/* Salary Range */}
-          <div className="space-y-2">
-            <Label>Faixa Salarial: ${salaryRange[0].toLocaleString()} - ${salaryRange[1].toLocaleString()}</Label>
-            <div className="px-2">
-              <Slider
-                value={salaryRange}
-                onValueChange={setSalaryRange}
-                max={50000}
-                min={0}
-                step={500}
-                className="w-full"
+          <Card className="text-center">
+            <CardHeader className="pb-3">
+              <div className="mx-auto mb-2 p-2 bg-purple-100 dark:bg-purple-900/20 rounded-full w-fit">
+                <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <CardTitle className="text-lg">Benchmark de carreira</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Compare seu salário e benefícios com o mercado global para negociar melhor.
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card className="text-center">
+            <CardHeader className="pb-3">
+              <div className="mx-auto mb-2 p-2 bg-orange-100 dark:bg-orange-900/20 rounded-full w-fit">
+                <Users className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              </div>
+              <CardTitle className="text-lg">Comunidade colaborativa</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Contribua com suas informações — ajudamos o mercado de desenvolvimento a ser mais justo.
+              </CardDescription>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 items-start">
+        {/* Filters */}
+        <Card className="md:max-w-[350px]">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              Filtros
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Search */}
+            <div className="space-y-2">
+              <Label htmlFor="search">Buscar por empresa ou cargo</Label>
+              <Input
+                id="search"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Ex: Google, Desenvolvedor"
+                onKeyPress={(e) => e.key === "Enter" && handleApplyFilters()}
               />
             </div>
-          </div>
 
-          {/* Tech Stack Filter */}
-          <TechStackFilter
-            selectedTechnologies={selectedTechnologies}
-            onTechnologiesChange={setSelectedTechnologies}
-          />
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 justify-between">
-
-            <div className="flex items-center gap-3">
-              <Button onClick={clearFilters} variant="outline" className="flex w-fit max-w-100">
-                Limpar Filtros
-              </Button>
-              <Button onClick={handleApplyFilters} className="flex w-fit max-w-100">
-                <Search className="h-4 w-4 mr-2" />
-                Aplicar Filtros
-              </Button>
+            {/* Salary Range */}
+            <div className="space-y-2">
+              <Label>Faixa Salarial: ${salaryRange[0].toLocaleString()} - ${salaryRange[1].toLocaleString()}</Label>
+              <div className="px-2">
+                <Slider
+                  value={salaryRange}
+                  onValueChange={setSalaryRange}
+                  max={50000}
+                  min={0}
+                  step={500}
+                  className="w-full"
+                />
+              </div>
             </div>
-          </div>
-					            {/* Results Count */}
+
+            {/* Tech Stack Filter */}
+            <TechStackFilter
+              selectedTechnologies={selectedTechnologies}
+              onTechnologiesChange={setSelectedTechnologies}
+            />
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 justify-between">
+              <div className="flex items-center gap-3">
+                <Button onClick={clearFilters} variant="outline" className="flex w-fit max-w-100">
+                  Limpar Filtros
+                </Button>
+                <Button onClick={handleApplyFilters} className="flex w-fit max-w-100">
+                  <Search className="h-4 w-4 mr-2" />
+                  Aplicar Filtros
+                </Button>
+              </div>
+            </div>
+            {/* Results Count */}
             {data && (
               <div className="text-center">
                 <Badge variant="secondary">
@@ -144,59 +208,57 @@ export function SubmissionsList() {
                 </Badge>
               </div>
             )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Results */}
-      {isLoading ? (
-        <div className="text-center py-8">
-          <p>Carregando submissões...</p>
-        </div>
-      ) : data?.submissions.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-muted-foreground">Nenhuma submissão encontrada com os filtros aplicados.</p>
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col w-full gap-4">
-            {data?.submissions.map((submission) => (
-              <SubmissionCard key={submission.id} submission={submission} />
-            ))}
+        {/* Results */}
+        {isLoading ? (
+          <div className="text-center py-8">
+            <p>Carregando submissões...</p>
           </div>
-
-          {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4">
-              <Button
-                onClick={() => handlePageChange(data.page - 1)}
-                disabled={data.page === 1}
-                variant="outline"
-                size="sm"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Anterior
-              </Button>
-              
-              <span className="text-sm text-muted-foreground">
-                Página {data.page} de {data.totalPages}
-              </span>
-              
-              <Button
-                onClick={() => handlePageChange(data.page + 1)}
-                disabled={data.page === data.totalPages}
-                variant="outline"
-                size="sm"
-              >
-                Próxima
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+        ) : data?.submissions.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">Nenhuma submissão encontrada com os filtros aplicados.</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col w-full gap-4">
+              {data?.submissions.map((submission) => (
+                <SubmissionCard key={submission.id} submission={submission} />
+              ))}
             </div>
-          )}
-        </>
-      )}
 
-							</div>
-
+            {/* Pagination */}
+            {data && data.totalPages > 1 && (
+              <div className="flex justify-center items-center gap-4">
+                <Button
+                  onClick={() => handlePageChange(data.page - 1)}
+                  disabled={data.page === 1}
+                  variant="outline"
+                  size="sm"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Anterior
+                </Button>
+                
+                <span className="text-sm text-muted-foreground">
+                  Página {data.page} de {data.totalPages}
+                </span>
+                
+                <Button
+                  onClick={() => handlePageChange(data.page + 1)}
+                  disabled={data.page === data.totalPages}
+                  variant="outline"
+                  size="sm"
+                >
+                  Próxima
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
