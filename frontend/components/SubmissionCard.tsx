@@ -54,7 +54,6 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           
           <div className="text-right">
             <Badge variant="secondary" className="text-lg font-semibold">
-              <DollarSign className="h-4 w-4 mr-1" />
               {formatSalary(submission.salary)}
             </Badge>
           </div>
