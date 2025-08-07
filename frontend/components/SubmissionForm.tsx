@@ -7,14 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { TechStackSelect } from "./TechStackSelect";
 import backend from "~backend/client";
-import type { CreateSubmissionRequest } from "~backend/submissions/types";
+import type { CreateSubmissionRequest, Technology } from "~backend/submissions/types";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [formData, setFormData] = useState<CreateSubmissionRequest>({
+  const [formData, setFormData] = useState({
     companyName: "",
     companyLink: "",
     position: "",
@@ -22,6 +23,8 @@ export function SubmissionForm() {
     comments: "",
     benefits: "",
   });
+
+  const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
   const createSubmission = useMutation({
     mutationFn: (data: CreateSubmissionRequest) => backend.submissions.create(data),
@@ -54,16 +57,20 @@ export function SubmissionForm() {
       return;
     }
 
-    const submissionData = {
-      ...formData,
+    const submissionData: CreateSubmissionRequest = {
+      companyName: formData.companyName,
+      companyLink: formData.companyLink,
+      position: formData.position,
+      salary: formData.salary,
       comments: formData.comments || undefined,
       benefits: formData.benefits || undefined,
+      technologyIds: selectedTechnologies.map(tech => tech.id),
     };
 
     createSubmission.mutate(submissionData);
   };
 
-  const handleInputChange = (field: keyof CreateSubmissionRequest, value: string | number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -127,6 +134,11 @@ export function SubmissionForm() {
                 required
               />
             </div>
+
+            <TechStackSelect
+              selectedTechnologies={selectedTechnologies}
+              onTechnologiesChange={setSelectedTechnologies}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="benefits">Benefícios</Label>

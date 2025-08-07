@@ -7,8 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Search, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { TechStackFilter } from "./TechStackFilter";
 import backend from "~backend/client";
-import type { ListSubmissionsRequest } from "~backend/submissions/types";
+import type { ListSubmissionsRequest, Technology } from "~backend/submissions/types";
 import { SubmissionCard } from "./SubmissionCard";
 
 export function SubmissionsList() {
@@ -18,10 +19,12 @@ export function SubmissionsList() {
     q: "",
     salaryMin: 0,
     salaryMax: 50000,
+    technologyIds: [],
   });
 
   const [searchInput, setSearchInput] = useState("");
   const [salaryRange, setSalaryRange] = useState([0, 50000]);
+  const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["submissions", filters],
@@ -45,6 +48,14 @@ export function SubmissionsList() {
     }));
   };
 
+  const handleTechStackFilter = () => {
+    setFilters(prev => ({
+      ...prev,
+      technologyIds: selectedTechnologies.map(tech => tech.id),
+      page: 1,
+    }));
+  };
+
   const handlePageChange = (newPage: number) => {
     setFilters(prev => ({ ...prev, page: newPage }));
   };
@@ -52,12 +63,14 @@ export function SubmissionsList() {
   const clearFilters = () => {
     setSearchInput("");
     setSalaryRange([0, 50000]);
+    setSelectedTechnologies([]);
     setFilters({
       page: 1,
       perPage: 20,
       q: "",
       salaryMin: 0,
       salaryMax: 50000,
+      technologyIds: [],
     });
   };
 
@@ -119,6 +132,16 @@ export function SubmissionsList() {
                 Aplicar Filtro de Salário
               </Button>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <TechStackFilter
+              selectedTechnologies={selectedTechnologies}
+              onTechnologiesChange={setSelectedTechnologies}
+            />
+            <Button onClick={handleTechStackFilter} variant="outline" className="w-full">
+              Aplicar Filtro de Tecnologias
+            </Button>
           </div>
 
           <div className="flex justify-between items-center">

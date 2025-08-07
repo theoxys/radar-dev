@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, ChevronDown, ChevronUp, Calendar, DollarSign } from "lucide-react";
+import { ExternalLink, ChevronDown, ChevronUp, Calendar, DollarSign, Code } from "lucide-react";
 import type { Submission } from "~backend/submissions/types";
 
 interface SubmissionCardProps {
@@ -53,6 +53,23 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
             </Badge>
           </div>
         </div>
+
+        {/* Tech Stack */}
+        {submission.technologies.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Code className="h-4 w-4" />
+              <span>Stack:</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {submission.technologies.map((tech) => (
+                <Badge key={tech.id} variant="outline" className="text-xs">
+                  {tech.name}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
       </CardHeader>
 
       <CardContent>
