@@ -8,12 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
-import backend from "~backend/client";
+import { useAuth } from "./AuthProvider";
 import type { CreateSubmissionRequest, Technology } from "~backend/submissions/types";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { getAuthenticatedBackend } = useAuth();
   
   const [formData, setFormData] = useState({
     companyName: "",
@@ -27,7 +28,10 @@ export function SubmissionForm() {
   const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
   const createSubmission = useMutation({
-    mutationFn: (data: CreateSubmissionRequest) => backend.submissions.create(data),
+    mutationFn: (data: CreateSubmissionRequest) => {
+      const backend = getAuthenticatedBackend();
+      return backend.submissions.create(data);
+    },
     onSuccess: () => {
       toast({
         title: "Sucesso!",

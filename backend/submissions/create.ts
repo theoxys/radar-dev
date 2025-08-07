@@ -1,11 +1,14 @@
 import { api } from "encore.dev/api";
+import { getAuthData } from "~encore/auth";
 import { submissionsDB } from "./db";
 import { CreateSubmissionRequest, Submission } from "./types";
 
 // Creates a new anonymous job submission.
 export const create = api<CreateSubmissionRequest, Submission>(
-  { expose: true, method: "POST", path: "/submissions" },
+  { expose: true, method: "POST", path: "/submissions", auth: true },
   async (req) => {
+    const auth = getAuthData()!;
+    
     // Start a transaction
     const tx = await submissionsDB.begin();
     
@@ -21,8 +24,8 @@ export const create = api<CreateSubmissionRequest, Submission>(
         benefits: string | null;
         created_at: Date;
       }>`
-        INSERT INTO submissions (company_name, company_link, position, salary, comments, benefits)
-        VALUES (${req.companyName}, ${req.companyLink}, ${req.position}, ${req.salary}, ${req.comments || null}, ${req.benefits || null})
+        INSERT INTO submissions (company_name, company_link, position, salary, comments, benefits, user_id)
+        VALUES (${req.companyName}, ${req.companyLink}, ${req.position}, ${req.salary}, ${req.comments || null}, ${req.benefits || null}, ${auth.userID})
         RETURNING id, company_name, company_link, position, salary, comments, benefits, created_at
       `;
 
