@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { X, Plus, Search } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { X, Plus, Check, ChevronsUpDown } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import backend from "~backend/client";
 import type { Technology } from "~backend/submissions/types";
 
@@ -16,14 +17,14 @@ interface TechStackSelectProps {
 }
 
 export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: TechStackSelectProps) {
+  const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: searchResults } = useQuery({
     queryKey: ["technologies", "search", searchQuery],
-    queryFn: () => backend.submissions.searchTechnologies({ q: searchQuery, limit: 10 }),
+    queryFn: () => backend.submissions.searchTechnologies({ q: searchQuery, limit: 20 }),
     enabled: searchQuery.length > 0,
   });
 
@@ -33,7 +34,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
       // Add the new technology to selected list
       onTechnologiesChange([...selectedTechnologies, newTechnology]);
       setSearchQuery("");
-      setShowSuggestions(false);
+      setOpen(false);
       
       // Invalidate search cache
       queryClient.invalidateQueries({ queryKey: ["technologies", "search"] });
@@ -69,7 +70,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
     
     onTechnologiesChange([...selectedTechnologies, technology]);
     setSearchQuery("");
-    setShowSuggestions(false);
+    setOpen(false);
   };
 
   const handleTechnologyRemove = (technologyId: string) => {
@@ -91,13 +92,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
     tech => tech.name.toLowerCase() === searchQuery.toLowerCase()
   );
 
-  const showCreateOption = searchQuery.trim() && !exactMatch && filteredSuggestions.length === 0;
-
-  useEffect(() => {
-    const handleClickOutside = () => setShowSuggestions(false);
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  const showCreateOption = searchQuery.trim() && !exactMatch;
 
   return (
     <div className="space-y-3">
@@ -123,67 +118,74 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
         </div>
       )}
 
-      {/* Search Input */}
-      <div className="relative" onClick={(e) => e.stopPropagation()}>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setShowSuggestions(true);
-            }}
-            onFocus={() => setShowSuggestions(true)}
-            placeholder="Digite uma tecnologia (ex: React, Node.js, Python)"
-            className="pl-10"
-          />
-        </div>
-
-        {/* Suggestions Dropdown */}
-        {showSuggestions && searchQuery && (
-          <Card className="absolute z-10 w-full mt-1 max-h-60 overflow-y-auto">
-            <CardContent className="p-2">
+      {/* Combobox */}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+          >
+            Selecionar tecnologias...
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full p-0" align="start">
+          <Command>
+            <CommandInput
+              placeholder="Digite uma tecnologia (ex: React, Node.js, Python)"
+              value={searchQuery}
+              onValueChange={setSearchQuery}
+            />
+            <CommandList>
+              <CommandEmpty>
+                {searchQuery ? "Nenhuma tecnologia encontrada" : "Digite para buscar tecnologias"}
+              </CommandEmpty>
+              
               {filteredSuggestions.length > 0 && (
-                <div className="space-y-1">
+                <CommandGroup heading="Tecnologias disponíveis">
                   {filteredSuggestions.map((tech) => (
-                    <Button
+                    <CommandItem
                       key={tech.id}
-                      type="button"
-                      variant="ghost"
-                      className="w-full justify-start h-auto p-2"
-                      onClick={() => handleTechnologySelect(tech)}
+                      value={tech.name}
+                      onSelect={() => handleTechnologySelect(tech)}
+                      className="cursor-pointer"
                     >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedTechnologies.some(t => t.id === tech.id)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
                       {tech.name}
-                    </Button>
+                    </CommandItem>
                   ))}
-                </div>
+                </CommandGroup>
               )}
 
               {showCreateOption && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full justify-start h-auto p-2 border-dashed"
-                  onClick={handleCreateTechnology}
-                  disabled={createTechnologyMutation.isPending}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  {createTechnologyMutation.isPending 
-                    ? "Criando..." 
-                    : `Cadastrar "${searchQuery.trim()}"`
-                  }
-                </Button>
+                <CommandGroup heading="Criar nova tecnologia">
+                  <CommandItem
+                    value={`create-${searchQuery}`}
+                    onSelect={handleCreateTechnology}
+                    disabled={createTechnologyMutation.isPending}
+                    className="cursor-pointer"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    {createTechnologyMutation.isPending 
+                      ? "Criando..." 
+                      : `Cadastrar "${searchQuery.trim()}"`
+                    }
+                  </CommandItem>
+                </CommandGroup>
               )}
-
-              {searchQuery && filteredSuggestions.length === 0 && !showCreateOption && (
-                <p className="text-sm text-gray-500 p-2">
-                  Nenhuma tecnologia encontrada
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        )}
-      </div>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
