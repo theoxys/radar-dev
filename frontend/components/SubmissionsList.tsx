@@ -90,7 +90,7 @@ export function SubmissionsList() {
           <Card className="text-center">
             <CardHeader className="pb-3">
               <div className="mx-auto mb-2 p-2 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
-                <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <DollarSign className="h-4 w-6 text-green-600 dark:text-green-400" />
               </div>
               <CardTitle className="text-lg">Transparência salarial</CardTitle>
             </CardHeader>
@@ -104,7 +104,7 @@ export function SubmissionsList() {
           <Card className="text-center">
             <CardHeader className="pb-3">
               <div className="mx-auto mb-2 p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
-                <Globe className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <Globe className="h-4 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <CardTitle className="text-lg">Oportunidades internacionais</CardTitle>
             </CardHeader>
@@ -118,7 +118,7 @@ export function SubmissionsList() {
           <Card className="text-center">
             <CardHeader className="pb-3">
               <div className="mx-auto mb-2 p-2 bg-purple-100 dark:bg-purple-900/20 rounded-full w-fit">
-                <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                <TrendingUp className="h-4 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <CardTitle className="text-lg">Benchmark de carreira</CardTitle>
             </CardHeader>
@@ -132,7 +132,7 @@ export function SubmissionsList() {
           <Card className="text-center">
             <CardHeader className="pb-3">
               <div className="mx-auto mb-2 p-2 bg-orange-100 dark:bg-orange-900/20 rounded-full w-fit">
-                <Users className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                <Users className="h-4 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <CardTitle className="text-lg">Comunidade colaborativa</CardTitle>
             </CardHeader>
