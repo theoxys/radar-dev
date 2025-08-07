@@ -81,11 +81,7 @@ export function SubmissionsList() {
       </div>
 
       {/* Benefits Cards */}
-      <div className="space-y-4">
-        <h3 className="text-2xl font-semibold text-center text-foreground">
-          Por que usar o Radar Dev?
-        </h3>
-        
+      <div className="space-y-4">      
         <div className="hidden md:grid md:grid-cols-3 gap-4">
           <Card className="text-center max-h-">
             <CardHeader>
