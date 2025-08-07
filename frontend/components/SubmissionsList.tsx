@@ -205,7 +205,7 @@ export function SubmissionsList() {
           </div>
         ) : (
           <>
-            <div className="flex flex-col w-full gap-4">
+            <div className="flex flex-col w-full gap-4 pb-6">
               {data?.submissions.map((submission) => (
                 <SubmissionCard key={submission.id} submission={submission} />
               ))}
