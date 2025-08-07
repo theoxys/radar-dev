@@ -86,11 +86,11 @@ export function SubmissionsList() {
           Por que usar o Radar Dev?
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="text-center">
-            <CardHeader className="pb-3">
+        <div className="hidden md:grid g:grid-cols-3 gap-4">
+          <Card className="text-center max-h-">
+            <CardHeader>
               <div className="mx-auto mb-2 p-2 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
-                <DollarSign className="h-4 w-6 text-green-600 dark:text-green-400" />
+                <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
               </div>
               <CardTitle className="text-lg">Transparência salarial</CardTitle>
             </CardHeader>
@@ -102,23 +102,9 @@ export function SubmissionsList() {
           </Card>
 
           <Card className="text-center">
-            <CardHeader className="pb-3">
-              <div className="mx-auto mb-2 p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
-                <Globe className="h-4 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <CardTitle className="text-lg">Oportunidades internacionais</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                Filtre vagas de empresas estrangeiras que contratam 100% remoto do Brasil.
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center">
-            <CardHeader className="pb-3">
+            <CardHeader className="">
               <div className="mx-auto mb-2 p-2 bg-purple-100 dark:bg-purple-900/20 rounded-full w-fit">
-                <TrendingUp className="h-4 w-6 text-purple-600 dark:text-purple-400" />
+                <TrendingUp className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               </div>
               <CardTitle className="text-lg">Benchmark de carreira</CardTitle>
             </CardHeader>
@@ -130,9 +116,9 @@ export function SubmissionsList() {
           </Card>
 
           <Card className="text-center">
-            <CardHeader className="pb-3">
+            <CardHeader className="">
               <div className="mx-auto mb-2 p-2 bg-orange-100 dark:bg-orange-900/20 rounded-full w-fit">
-                <Users className="h-4 w-6 text-orange-600 dark:text-orange-400" />
+                <Users className="h-4 w-4 text-orange-600 dark:text-orange-400" />
               </div>
               <CardTitle className="text-lg">Comunidade colaborativa</CardTitle>
             </CardHeader>
