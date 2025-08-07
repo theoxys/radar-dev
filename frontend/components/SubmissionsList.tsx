@@ -83,7 +83,7 @@ export function SubmissionsList() {
       {/* Benefits Cards */}
       <div className="space-y-4">      
         <div className="hidden md:grid md:grid-cols-3 gap-4">
-          <Card className="text-center max-h-">
+          <Card className="text-center gap-2">
             <CardHeader>
               <div className="mx-auto mb-2 p-2 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
                 <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -97,7 +97,7 @@ export function SubmissionsList() {
             </CardContent>
           </Card>
 
-          <Card className="text-center">
+          <Card className="text-center gap-2">
             <CardHeader >
               <div className="mx-auto mb-2 p-2 bg-purple-100 dark:bg-purple-900/20 rounded-full w-fit">
                 <TrendingUp className="h-4 w-4 text-purple-600 dark:text-purple-400" />
