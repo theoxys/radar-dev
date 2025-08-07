@@ -76,7 +76,7 @@ export function SubmissionsList() {
           Descubra o mercado global de tecnologia
         </h1>
         <h2 className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Saiba quanto ganham devs brasileiros em empresas gringas e encontre as melhores oportunidades sem sair de casa.
+          Saiba quanto ganham devs brasileiros em empresas gringas e encontre as melhores oportunidades para alavancar sua carreira.
         </h2>
       </div>
 
