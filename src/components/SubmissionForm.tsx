@@ -74,7 +74,7 @@ export function SubmissionForm() {
 
   return (
     <div className="max-w-[800px] mx-auto">
-      <Card className="p-16">
+      <Card className="p-6 md:p-16">
         <CardHeader className="p-0">
           <CardTitle className="text-2xl font-bold">Compartilhar Informações de Trabalho</CardTitle>
           <CardDescription>
@@ -85,7 +85,7 @@ export function SubmissionForm() {
 
         <CardContent className="p-0">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="companyName">Nome da Empresa *</Label>
                 <Input
@@ -110,7 +110,7 @@ export function SubmissionForm() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="position">Cargo *</Label>
                 <Input
