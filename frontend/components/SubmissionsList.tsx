@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -9,34 +8,33 @@ import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, ChevronLeft, ChevronRight, Filter, DollarSign, Globe, TrendingUp, Users } from "lucide-react";
 import { TechStackFilter } from "./TechStackFilter";
-import backend from "~backend/client";
-import type { ListSubmissionsRequest, Technology } from "~backend/submissions/types";
+import type { Technology } from "@/types/types";
+import { useGetSubmissions, type GetSubmissionsParams } from "@/hooks/useSubmissionts";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SubmissionCard } from "./SubmissionCard";
 import { HeroSection } from "./HeroSection";
 
 export function SubmissionsList() {
-  const [filters, setFilters] = useState<ListSubmissionsRequest>({
+  const [filters, setFilters] = useState<GetSubmissionsParams>({
     page: 1,
     perPage: 20,
-    q: "",
+    searchQuery: "",
     salaryMin: 0,
     salaryMax: 50000,
-    technologyIds: [],
+    technologyIds: [] as string[],
+    sort: "recent",
   });
 
   const [searchInput, setSearchInput] = useState("");
   const [salaryRange, setSalaryRange] = useState([0, 50000]);
   const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["submissions", filters],
-    queryFn: () => backend.submissions.list(filters),
-  });
+  const { data, isLoading, error } = useGetSubmissions(filters);
 
   const handleApplyFilters = () => {
     setFilters((prev) => ({
       ...prev,
-      q: searchInput,
+      searchQuery: searchInput,
       salaryMin: salaryRange[0],
       salaryMax: salaryRange[1],
       technologyIds: selectedTechnologies.map((tech) => tech.id),
@@ -55,10 +53,11 @@ export function SubmissionsList() {
     setFilters({
       page: 1,
       perPage: 20,
-      q: "",
+      searchQuery: "",
       salaryMin: 0,
       salaryMax: 50000,
       technologyIds: [],
+      sortSalary: "desc",
     });
   };
 
@@ -71,12 +70,12 @@ export function SubmissionsList() {
   }
 
   return (
-    <div className="max-w-[1330px] mx-auto space-y-8">
+    <div className="w-full max-w-[1330px] mx-auto space-y-8">
       <HeroSection />
 
-      <div className="flex flex-col md:flex-row gap-4 items-start">
+      <div className="flex w-full flex-col md:flex-row gap-4 items-start">
         {/* Filters */}
-        <Card className="w-full md:max-w-[350px]">
+        <Card className="w-full md:max-w-[350px] md:sticky md:top-20 md:self-start">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Filter className="h-5 w-5" />
@@ -90,6 +89,27 @@ export function SubmissionsList() {
             )}
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Sort */}
+            <div className="space-y-2">
+              <Label htmlFor="sort">Ordenar por</Label>
+              <Select
+                value={filters.sort ?? "recent"}
+                onValueChange={(value: NonNullable<GetSubmissionsParams["sort"]>) =>
+                  setFilters((prev) => ({ ...prev, sort: value, page: 1 }))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Ordenação" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="recent">Mais recentes</SelectItem>
+                  <SelectItem value="oldest">Mais antigos</SelectItem>
+                  <SelectItem value="salary_desc">Maiores salários</SelectItem>
+                  <SelectItem value="salary_asc">Menores salários</SelectItem>
+                  <SelectItem value="alpha">Ordem alfabética</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             {/* Search */}
             <div className="space-y-2">
               <Label htmlFor="search">Buscar por empresa ou cargo</Label>
@@ -143,14 +163,14 @@ export function SubmissionsList() {
           <div className="text-center py-8">
             <p>Carregando submissões...</p>
           </div>
-        ) : data?.submissions.length === 0 ? (
+        ) : (data?.items?.length ?? 0) === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">Nenhuma submissão encontrada com os filtros aplicados.</p>
           </div>
         ) : (
           <>
             <div className="flex flex-col w-full gap-4 pb-6">
-              {data?.submissions.map((submission) => (
+              {data?.items.map((submission) => (
                 <SubmissionCard key={submission.id} submission={submission} />
               ))}
             </div>

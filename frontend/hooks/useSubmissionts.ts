@@ -12,7 +12,9 @@ export interface GetSubmissionsParams {
   salaryMax?: number;
   searchQuery?: string;
   technologyIds?: string[];
+  // Deprecated: prefer `sort` below; kept for backward-compat
   sortSalary?: SortDirection; // asc | desc
+  sort?: "recent" | "oldest" | "salary_desc" | "salary_asc" | "alpha";
 }
 
 export interface PaginatedResult<T> {
@@ -131,7 +133,31 @@ async function fetchSubmissions(params: GetSubmissionsParams): Promise<Paginated
     query = query.in("submission_technologies.technology_id", ids);
   }
 
-  query = query.order("salary_in_cents", { ascending: params.sortSalary !== "desc" });
+  // Sorting
+  const sortOption = params.sort;
+  if (!sortOption && params.sortSalary) {
+    // Backward-compat: only salary sort provided
+    query = query.order("salary_in_cents", { ascending: params.sortSalary === "asc" });
+  } else {
+    switch (sortOption) {
+      case "oldest":
+        query = query.order("created_at", { ascending: true });
+        break;
+      case "salary_desc":
+        query = query.order("salary_in_cents", { ascending: false });
+        break;
+      case "salary_asc":
+        query = query.order("salary_in_cents", { ascending: true });
+        break;
+      case "alpha":
+        query = query.order("company_name", { ascending: true });
+        break;
+      case "recent":
+      default:
+        query = query.order("created_at", { ascending: false });
+        break;
+    }
+  }
 
   const { data, error, count } = await query;
   if (error) throw error;
@@ -155,6 +181,7 @@ export function useGetSubmissions(params: GetSubmissionsParams) {
         searchQuery: params.searchQuery ?? "",
         technologyIds: params.technologyIds ?? [],
         sortSalary: params.sortSalary ?? "asc",
+        sort: params.sort ?? "recent",
       },
     ],
     [
@@ -165,6 +192,7 @@ export function useGetSubmissions(params: GetSubmissionsParams) {
       params.searchQuery,
       params.technologyIds,
       params.sortSalary,
+      params.sort,
     ]
   );
 
@@ -228,6 +256,7 @@ export function useGetTechnologies(params: GetTechnologiesParams) {
   return useQuery({
     queryKey: key,
     queryFn: () => fetchTechnologies(params),
+    enabled: Boolean((params.searchQuery ?? "").length > 0),
   });
 }
 

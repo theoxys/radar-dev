@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,9 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
-import backend from "~backend/client";
-import { supabase } from "@/lib/supabase";
 import { CreateSubmissionRequest, Technology } from "@/types/types";
+import { useCreateSubmission } from "@/hooks/useSubmissionts";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
@@ -27,26 +25,7 @@ export function SubmissionForm() {
 
   const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
-  const createSubmission = useMutation({
-    mutationFn: (data: CreateSubmissionRequest) => {
-      return backend.submissions.create(data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Sucesso!",
-        description: "Seus dados foram compartilhados anonimamente.",
-      });
-      navigate("/");
-    },
-    onError: (error) => {
-      console.error("Error creating submission:", error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível enviar os dados. Tente novamente.",
-        variant: "destructive",
-      });
-    },
-  });
+  const createSubmissionMutation = useCreateSubmission();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,13 +43,29 @@ export function SubmissionForm() {
       companyName: formData.companyName,
       companyLink: formData.companyLink,
       position: formData.position,
-      salary: formData.salary,
+      salary_in_cents: formData.salary,
       comments: formData.comments || undefined,
       benefits: formData.benefits || undefined,
       technologyIds: selectedTechnologies.map((tech) => tech.id),
     };
 
-    createSubmission.mutate(submissionData);
+    createSubmissionMutation.mutate(submissionData, {
+      onSuccess: () => {
+        toast({
+          title: "Sucesso!",
+          description: "Seus dados foram compartilhados anonimamente.",
+        });
+        navigate("/");
+      },
+      onError: (error) => {
+        console.error("Error creating submission:", error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível enviar os dados. Tente novamente.",
+          variant: "destructive",
+        });
+      },
+    });
   };
 
   const handleInputChange = (field: keyof typeof formData, value: string | number) => {
@@ -171,8 +166,8 @@ export function SubmissionForm() {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={createSubmission.isPending}>
-              {createSubmission.isPending ? "Enviando..." : "Compartilhar Anonimamente"}
+            <Button type="submit" className="w-full" disabled={createSubmissionMutation.isPending}>
+              {createSubmissionMutation.isPending ? "Enviando..." : "Compartilhar Anonimamente"}
             </Button>
           </form>
         </CardContent>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -8,8 +8,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { X, Plus, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import backend from "~backend/client";
-import type { Technology } from "~backend/submissions/types";
+import type { Technology } from "@/types/types";
+import { useCreateTechnology, useGetTechnologies } from "@/hooks/useSubmissionts";
 
 interface TechStackSelectProps {
   selectedTechnologies: Technology[];
@@ -22,82 +22,78 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: searchResults, isLoading: isSearching } = useQuery({
-    queryKey: ["technologies", "search", searchQuery],
-    queryFn: () => backend.submissions.searchTechnologies({ q: searchQuery, limit: 20 }),
-    enabled: searchQuery.length > 0,
+  const { data: searchResults, isLoading: isSearching } = useGetTechnologies({
+    page: 1,
+    perPage: 20,
+    searchQuery,
   });
 
-  const createTechnologyMutation = useMutation({
-    mutationFn: (name: string) => backend.submissions.createTechnology({ name }),
-    onSuccess: (newTechnology) => {
-      // Add the new technology to selected list
-      onTechnologiesChange([...selectedTechnologies, newTechnology]);
-      setSearchQuery("");
-      setOpen(false);
-      
-      // Invalidate search cache
-      queryClient.invalidateQueries({ queryKey: ["technologies", "search"] });
-      
-      toast({
-        title: "Tecnologia criada!",
-        description: `"${newTechnology.name}" foi adicionada com sucesso!`,
-      });
-    },
-    onError: (error: any) => {
-      console.error("Error creating technology:", error);
-      if (error.message?.includes("already exists")) {
+  const createTechnologyMutation = useCreateTechnology();
+
+  const handleCreateTechnology = () => {
+    const trimmedName = searchQuery.trim();
+    if (!trimmedName) return;
+
+    createTechnologyMutation.mutate(trimmedName, {
+      onSuccess: (newTechnology) => {
+        // Add the new technology to selected list
+        onTechnologiesChange([...selectedTechnologies, newTechnology]);
+        setSearchQuery("");
+        setOpen(false);
+
+        // Invalidate search cache
+        queryClient.invalidateQueries({ queryKey: ["technologies"] });
+
         toast({
-          title: "Tecnologia já existe",
-          description: "Esta tecnologia já está cadastrada no sistema.",
-          variant: "destructive",
+          title: "Tecnologia criada!",
+          description: `"${newTechnology.name}" foi adicionada com sucesso!`,
         });
-      } else {
-        toast({
-          title: "Erro",
-          description: "Não foi possível criar a tecnologia. Tente novamente.",
-          variant: "destructive",
-        });
-      }
-    },
-  });
+      },
+      onError: (error: any) => {
+        console.error("Error creating technology:", error);
+        if (error.message?.includes("already exists")) {
+          toast({
+            title: "Tecnologia já existe",
+            description: "Esta tecnologia já está cadastrada no sistema.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Erro",
+            description: "Não foi possível criar a tecnologia. Tente novamente.",
+            variant: "destructive",
+          });
+        }
+      },
+    });
+  };
 
   const handleTechnologySelect = (technology: Technology) => {
     // Check if already selected
-    if (selectedTechnologies.some(t => t.id === technology.id)) {
+    if (selectedTechnologies.some((t) => t.id === technology.id)) {
       return;
     }
-    
+
     onTechnologiesChange([...selectedTechnologies, technology]);
     setSearchQuery("");
     setOpen(false);
   };
 
   const handleTechnologyRemove = (technologyId: string) => {
-    onTechnologiesChange(selectedTechnologies.filter(t => t.id !== technologyId));
+    onTechnologiesChange(selectedTechnologies.filter((t) => t.id !== technologyId));
   };
 
-  const handleCreateTechnology = () => {
-    const trimmedName = searchQuery.trim();
-    if (trimmedName) {
-      createTechnologyMutation.mutate(trimmedName);
-    }
-  };
+  const filteredSuggestions =
+    searchResults?.items?.filter((tech) => !selectedTechnologies.some((selected) => selected.id === tech.id)) || [];
 
-  const filteredSuggestions = searchResults?.technologies.filter(
-    tech => !selectedTechnologies.some(selected => selected.id === tech.id)
-  ) || [];
+  const exactMatch = filteredSuggestions.find((tech) => tech.name.toLowerCase() === searchQuery.toLowerCase());
 
-  const exactMatch = filteredSuggestions.find(
-    tech => tech.name.toLowerCase() === searchQuery.toLowerCase()
-  );
-
-  const showCreateOption = searchQuery.trim() && !exactMatch && !isSearching;
+  const showCreateOption = Boolean(searchQuery.trim()) && !exactMatch && !isSearching;
 
   return (
     <div className="space-y-3">
       <Label>Stack Tecnológica</Label>
-      
+
       {/* Selected Technologies */}
       {selectedTechnologies.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -121,12 +117,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
       {/* Combobox */}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full justify-between"
-          >
+          <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
             Selecionar tecnologias...
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -145,13 +136,13 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
                   <span className="ml-2 text-sm text-gray-500">Buscando...</span>
                 </div>
               )}
-              
+
               {!isSearching && (
                 <CommandEmpty>
                   {searchQuery ? "Nenhuma tecnologia encontrada" : "Digite para buscar tecnologias"}
                 </CommandEmpty>
               )}
-              
+
               {!isSearching && filteredSuggestions.length > 0 && (
                 <CommandGroup heading="Tecnologias disponíveis">
                   {filteredSuggestions.map((tech) => (
@@ -164,9 +155,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          selectedTechnologies.some(t => t.id === tech.id)
-                            ? "opacity-100"
-                            : "opacity-0"
+                          selectedTechnologies.some((t) => t.id === tech.id) ? "opacity-100" : "opacity-0"
                         )}
                       />
                       {tech.name}
@@ -184,10 +173,7 @@ export function TechStackSelect({ selectedTechnologies, onTechnologiesChange }: 
                     className="cursor-pointer"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    {createTechnologyMutation.isPending 
-                      ? "Criando..." 
-                      : `Cadastrar "${searchQuery.trim()}"`
-                    }
+                    {createTechnologyMutation.isPending ? "Criando..." : `Cadastrar "${searchQuery.trim()}"`}
                   </CommandItem>
                 </CommandGroup>
               )}

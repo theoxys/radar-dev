@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Calendar, Code } from "lucide-react";
-import type { Submission } from "~backend/submissions/types";
+import type { Submission } from "@/types/types";
 
 interface SubmissionCardProps {
   submission: Submission;
@@ -53,8 +53,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           </div>
 
           <div className="text-right">
+            <p>Remuneração:</p>
             <Badge variant="secondary" className="text-lg font-semibold">
-              {formatSalary(submission.salary)}
+              {formatSalary(submission.salary_in_cents)} / mês
             </Badge>
           </div>
         </div>
