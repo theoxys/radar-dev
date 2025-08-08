@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { PlusCircle, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import Logo from "./Logo";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 
 export function Header() {
   const { theme, setTheme } = useTheme();

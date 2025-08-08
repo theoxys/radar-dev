@@ -1,15 +1,16 @@
+import React from "react";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { useQueryClient } from "@tanstack/react-query";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Label } from "../components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../components/ui/command";
 import { X, Plus, Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import type { Technology } from "@/types/types";
-import { useCreateTechnology, useGetTechnologies } from "@/hooks/useSubmissionts";
+import { useToast } from "../components/ui/use-toast";
+import { cn } from "../lib/utils";
+import type { Technology } from "../types/types";
+import { useCreateTechnology, useGetTechnologies } from "../hooks/useSubmissionts";
 
 interface TechStackSelectProps {
   selectedTechnologies: Technology[];

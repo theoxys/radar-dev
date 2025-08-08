@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 import { ExternalLink, Calendar, Code } from "lucide-react";
-import type { Submission } from "@/types/types";
+import type { Submission } from "../types/types";
 
 interface SubmissionCardProps {
   submission: Submission;

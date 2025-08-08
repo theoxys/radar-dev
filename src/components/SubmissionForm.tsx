@@ -1,14 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { useToast } from "../components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
-import { CreateSubmissionRequest, Technology } from "@/types/types";
-import { useCreateSubmission } from "@/hooks/useSubmissionts";
+import { CreateSubmissionRequest, Technology } from "../types/types";
+import { useCreateSubmission } from "../hooks/useSubmissionts";
 
 export function SubmissionForm() {
   const navigate = useNavigate();

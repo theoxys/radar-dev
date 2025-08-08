@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
-import type { CreateSubmissionRequest, Submission, Technology } from "@/types/types";
+import { supabase } from "../lib/supabase";
+import type { CreateSubmissionRequest, Submission, Technology } from "../types/types";
 
 type SortDirection = "asc" | "desc";
 
