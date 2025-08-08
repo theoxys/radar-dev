@@ -23,13 +23,13 @@ export function FiltersProvider({ children }: { children: React.ReactNode }) {
     perPage: 20,
     searchQuery: "",
     salaryMin: 0,
-    salaryMax: 50000,
+    salaryMax: 5000000, // $50,000 em centavos
     technologyIds: [],
     sort: "recent",
   });
 
   const [searchInput, setSearchInput] = useState("");
-  const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 50000]);
+  const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 5000000]); // em centavos
   const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
 
   const applyFilters = () => {
@@ -45,14 +45,14 @@ export function FiltersProvider({ children }: { children: React.ReactNode }) {
 
   const clearFilters = () => {
     setSearchInput("");
-    setSalaryRange([0, 50000]);
+    setSalaryRange([0, 5000000]);
     setSelectedTechnologies([]);
     setFilters({
       page: 1,
       perPage: 20,
       searchQuery: "",
       salaryMin: 0,
-      salaryMax: 50000,
+      salaryMax: 5000000, // $50,000 em centavos
       technologyIds: [],
       sort: "recent",
     });

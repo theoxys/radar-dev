@@ -9,6 +9,7 @@ import { useToast } from "../components/ui/use-toast";
 import { TechStackSelect } from "./TechStackSelect";
 import { CreateSubmissionRequest, Technology } from "../types/types";
 import { useCreateSubmission } from "../hooks/useSubmissionts";
+import { CurrencyInput } from "../components/ui/currency-input";
 
 export function SubmissionForm() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function SubmissionForm() {
     companyName: "",
     companyLink: "",
     position: "",
-    salary: 0,
+    salaryInCents: 0,
     comments: "",
     benefits: "",
   });
@@ -30,7 +31,7 @@ export function SubmissionForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.companyName || !formData.companyLink || !formData.position || !formData.salary) {
+    if (!formData.companyName || !formData.companyLink || !formData.position || !formData.salaryInCents) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
@@ -43,7 +44,7 @@ export function SubmissionForm() {
       companyName: formData.companyName,
       companyLink: formData.companyLink,
       position: formData.position,
-      salary_in_cents: formData.salary,
+      salary_in_cents: formData.salaryInCents,
       comments: formData.comments || undefined,
       benefits: formData.benefits || undefined,
       technologyIds: selectedTechnologies.map((tech) => tech.id),
@@ -124,14 +125,11 @@ export function SubmissionForm() {
 
               <div className="space-y-2">
                 <Label htmlFor="salary">Salário (USD) / Mensal *</Label>
-                <Input
+                <CurrencyInput
                   id="salary"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={formData.salary || ""}
-                  onChange={(e) => handleInputChange("salary", parseFloat(e.target.value) || 0)}
-                  placeholder="Ex: 8500.00"
+                  value={formData.salaryInCents}
+                  onChange={(value) => handleInputChange("salaryInCents", value)}
+                  placeholder="Ex: $8,500.00"
                   required
                 />
               </div>

@@ -55,7 +55,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           <div className="text-right">
             <p>Remuneração:</p>
             <Badge variant="secondary" className="text-lg font-semibold">
-              {formatSalary(submission.salary_in_cents)} / mês
+              {formatSalary(submission.salary_in_cents / 100)} / mês
             </Badge>
           </div>
         </div>

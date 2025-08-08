@@ -83,14 +83,16 @@ export function MobileFiltersContent() {
       </div>
 
       <div className="space-y-2">
-        <Label>Faixa Salarial</Label>
+        <Label>
+          Faixa Salarial: ${(salaryRange[0] / 100).toLocaleString()} - ${(salaryRange[1] / 100).toLocaleString()}
+        </Label>
         <div className="py-2">
           <Slider
             value={salaryRange}
             onValueChange={setSalaryRange as any}
-            max={50000}
+            max={5000000} // $50,000 em centavos
             min={0}
-            step={500}
+            step={50000} // $500 em centavos
             className="w-full"
           />
         </div>
