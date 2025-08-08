@@ -1,4 +1,6 @@
 import { DollarSign, TrendingUp, Users } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function HeroSection() {
@@ -12,6 +14,11 @@ export function HeroSection() {
             Saiba quanto ganham devs brasileiros em empresas gringas e encontre as melhores oportunidades para alavancar
             sua carreira.
           </h2>
+          <div className="pt-2">
+            <Link to="/submit">
+              <Button size="lg">Compartilhar meus dados de forma anônima</Button>
+            </Link>
+          </div>
         </div>
 
         {/* Benefits Cards */}

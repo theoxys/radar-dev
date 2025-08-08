@@ -16,7 +16,7 @@ function AppInner() {
         <FiltersProvider>
           <div className="min-h-screen bg-background">
             <Header />
-            <main className="container mx-auto px-4 py-8">
+            <main className="max-w-[1280px] mx-auto px-4 py-8">
               <Routes>
                 <Route path="/" element={<SubmissionsList />} />
                 <Route path="/submit" element={<SubmissionForm />} />
