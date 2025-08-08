@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
@@ -7,57 +7,32 @@ import { Badge } from "../components/ui/badge";
 import { Slider } from "../components/ui/slider";
 import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { TechStackFilter } from "./TechStackFilter";
-import type { Technology } from "../types/types";
-import { useGetSubmissions, type GetSubmissionsParams } from "../hooks/useSubmissionts";
+import { useGetSubmissions } from "../hooks/useSubmissionts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { SubmissionCard } from "./SubmissionCard";
 import { HeroSection } from "./HeroSection";
+import { useFiltersContext } from "@/context/FiltersContext";
 
 export function SubmissionsList() {
-  const [filters, setFilters] = useState<GetSubmissionsParams>({
-    page: 1,
-    perPage: 20,
-    searchQuery: "",
-    salaryMin: 0,
-    salaryMax: 50000,
-    technologyIds: [] as string[],
-    sort: "recent",
-  });
-
-  const [searchInput, setSearchInput] = useState("");
-  const [salaryRange, setSalaryRange] = useState([0, 50000]);
-  const [selectedTechnologies, setSelectedTechnologies] = useState<Technology[]>([]);
+  const {
+    filters,
+    setFilters,
+    searchInput,
+    setSearchInput,
+    salaryRange,
+    setSalaryRange,
+    selectedTechnologies,
+    setSelectedTechnologies,
+    applyFilters,
+    clearFilters,
+  } = useFiltersContext();
 
   const { data, isLoading, error } = useGetSubmissions(filters);
 
-  const handleApplyFilters = () => {
-    setFilters((prev) => ({
-      ...prev,
-      searchQuery: searchInput,
-      salaryMin: salaryRange[0],
-      salaryMax: salaryRange[1],
-      technologyIds: selectedTechnologies.map((tech) => tech.id),
-      page: 1,
-    }));
-  };
+  const handleApplyFilters = () => applyFilters();
 
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({ ...prev, page: newPage }));
-  };
-
-  const clearFilters = () => {
-    setSearchInput("");
-    setSalaryRange([0, 50000]);
-    setSelectedTechnologies([]);
-    setFilters({
-      page: 1,
-      perPage: 20,
-      searchQuery: "",
-      salaryMin: 0,
-      salaryMax: 50000,
-      technologyIds: [],
-      sortSalary: "desc",
-    });
   };
 
   if (error) {
@@ -93,9 +68,7 @@ export function SubmissionsList() {
               <Label htmlFor="sort">Ordenar por</Label>
               <Select
                 value={filters.sort ?? "recent"}
-                onValueChange={(value: NonNullable<GetSubmissionsParams["sort"]>) =>
-                  setFilters((prev) => ({ ...prev, sort: value, page: 1 }))
-                }
+                onValueChange={(value) => setFilters((p) => ({ ...p, sort: value as any, page: 1 }))}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Ordenação" />
@@ -129,7 +102,7 @@ export function SubmissionsList() {
               <div className="py-2">
                 <Slider
                   value={salaryRange}
-                  onValueChange={setSalaryRange}
+                  onValueChange={setSalaryRange as any}
                   max={50000}
                   min={0}
                   step={500}
