@@ -1,8 +1,7 @@
 <h1 align="center">Radar Dev — Compartilhe cargos, empresas e salários</h1>
 
-----
+<img width="2978" height="1656" alt="image" src="https://github.com/user-attachments/assets/30892ab6-32d4-4983-951b-2e0ba54547b8" />
 
-https://github.com/theoxys/radar-dev.git
 
 ### Objetivo
 
